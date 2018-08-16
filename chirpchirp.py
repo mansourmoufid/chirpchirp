@@ -140,9 +140,9 @@ if __name__ == '__main__':
 
     audio = pyaudio.PyAudio()
     if tx:
-        info = audio.get_default_input_device_info()
-    else:
         info = audio.get_default_output_device_info()
+    else:
+        info = audio.get_default_input_device_info()
     fs = int(info['defaultSampleRate'])
     samples = int(fs * period)
     audio.open = functools.partial(
