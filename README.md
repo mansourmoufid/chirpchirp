@@ -1,5 +1,7 @@
 ChirpChirp is a script to transmit data over audio with chirp modulation.
 
+[Watch a demo on YouTube.](https://www.youtube.com/watch?v=S4AMfk_PXTA)
+
 
 ## Requirements
 
