@@ -18,11 +18,11 @@ and a period of one eighth of a second, are a good choice.
 
 Then start a receiving process in one terminal:
 
-    $ python -u chirpchirp.py 2000 12000 0.125
+    $ python -u chirpchirp.py rx 2000 12000 0.125
 
 and a transmitting process in another terminal, with the same parameters:
 
-    $ echo Hello | python -u chirpchirp.py 2000 12000 0.125
+    $ echo Hello | python -u chirpchirp.py tx 2000 12000 0.125
 
 
 [Python]: <https://www.python.org/>
