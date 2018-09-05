@@ -79,7 +79,6 @@ def modxcor(x, y):
     Y = numpy.fft.rfft(y)
     Z = X * Y
     z = numpy.fft.irfft(Z, n=(m + n))
-    z *= 1.0 / z.size
     return z[(n / 2):-(n / 2)]
 
 
