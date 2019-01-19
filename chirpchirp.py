@@ -29,7 +29,7 @@ __author__ = 'Mansour Moufid'
 __email__ = 'mansourmoufid@gmail.com'
 __copyright__ = 'Copyright 2018, 2019, Mansour Moufid'
 __license__ = 'ISC'
-__version__ = '0.1'
+__version__ = '0.2'
 __status__ = 'Development'
 
 
@@ -58,14 +58,45 @@ def readbytes(f, tty=None):
         yield byte
 
 
+def F(n):
+    if n == 0:
+        return 0
+    elif n == 1:
+        return 1
+    else:
+        return F(n - 1) + F(n - 2)
+
+
+def encode(x):
+    n = 1
+    while F(n) <= x:
+        n = n + 1
+    b = []
+    r = x
+    for i in range(n - 1, 1, -1):
+        if F(i) <= r:
+            r = r - F(i)
+            b.append(1)
+        else:
+            b.append(0)
+    return b[::-1] + [1]
+
+
+def decode(x):
+    w = 0
+    for i, b in enumerate(x[:-1]):
+        w = w + F(i + 2) * b
+    return w
+
+
 def tobits(bytes):
     for byte in bytes:
-        for i in range(8):
-            yield (byte >> i) & 1
+        for bit in encode(byte):
+            yield bit
 
 
 def tobyte(bits):
-    return sum(2 ** i * bit for i, bit in enumerate(bits))
+    return decode(bits)
 
 
 def modxcor(x, y):
@@ -172,11 +203,10 @@ if __name__ == '__main__':
                 f.write('\n')
     else:
         q = queue.Queue()
-        decode = functools.partial(dem, zero, one, q)
         stream = audio.open(
             frames_per_buffer=one.size,
             input=True,
-            stream_callback=decode,
+            stream_callback=functools.partial(dem, zero, one, q),
         )
         stream.start_stream()
         bits = []
@@ -186,7 +216,7 @@ if __name__ == '__main__':
             except queue.Empty:
                 continue
             bits.append(bit)
-            if len(bits) == 8:
+            if bits[-2:] == [1, 1]:
                 byte = tobyte(bits)
                 if sys.stdout.isatty():
                     byte &= 127
