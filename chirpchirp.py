@@ -27,7 +27,7 @@ import termios
 
 __author__ = 'Mansour Moufid'
 __email__ = 'mansourmoufid@gmail.com'
-__copyright__ = 'Copyright 2018, Mansour Moufid'
+__copyright__ = 'Copyright 2018, 2019, Mansour Moufid'
 __license__ = 'ISC'
 __version__ = '0.1'
 __status__ = 'Development'
@@ -99,7 +99,7 @@ def chirp(bandwidth, period, samples):
 
 def mod(zero, one, bit):
     data = one if bit == 1 else zero
-    pcm = PCM_DTYPE(data * A * PCM_MAX)
+    pcm = PCM_DTYPE(data * PCM_MAX)
     frames = pcm.tostring()
     return frames
 
@@ -130,9 +130,9 @@ if __name__ == '__main__':
         fmax = int(sys.argv[3])
         period = float(sys.argv[4])
         try:
-            A = float(sys.argv[5])
+            amplitude = float(sys.argv[5])
         except:
-            A = 1.0
+            amplitude = 1.0
     except:
         print(__doc__)
         sys.exit(os.EX_USAGE)
@@ -151,7 +151,7 @@ if __name__ == '__main__':
         rate=fs,
     )
 
-    one = chirp((fmin, fmax), period, samples)
+    one = chirp((fmin, fmax), period, samples) * amplitude
     zero = one[::-1]
 
     if tx:
