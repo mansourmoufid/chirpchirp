@@ -140,11 +140,11 @@ def dem(zero, one, bits, frames, nframes=None, timing=None, status=None):
     data = numpy.float32(pcm) / (PCM_MAX + 1.0)
     xc0 = modxcor(data, zero)
     xc1 = modxcor(data, one)
-    i0 = numpy.argmax(xc0 * xc0)
-    i1 = numpy.argmax(xc1 * xc1)
-    if abs(xc0[i0]) > 10.0 * numpy.std(xc0):
+    k0 = (numpy.max(xc0) - numpy.min(xc0)) / numpy.std(xc0)
+    k1 = (numpy.max(xc1) - numpy.min(xc1)) / numpy.std(xc1)
+    if k0 > 2 * k1:
         bits.put(0)
-    if abs(xc1[i1]) > 10.0 * numpy.std(xc1):
+    if k1 > 2 * k0:
         bits.put(1)
     return (None, pyaudio.paContinue)
 
