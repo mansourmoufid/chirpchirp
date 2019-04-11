@@ -187,7 +187,7 @@ if __name__ == '__main__':
 
     if tx:
         stream = audio.open(
-            frames_per_buffer=one.size,
+            frames_per_buffer=2 ** 12,
             output=True,
         )
         if sys.stdin.isatty():
