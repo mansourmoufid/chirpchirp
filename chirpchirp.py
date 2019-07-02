@@ -13,6 +13,7 @@ Options:
 
 from __future__ import print_function
 
+import codecs
 import functools
 import numpy
 import os
@@ -168,6 +169,9 @@ if __name__ == '__main__':
         print(__doc__)
         sys.exit(os.EX_USAGE)
 
+    sys.stdin = codecs.getreader(sys.stdin.encoding)(sys.stdin)
+    sys.stdout = codecs.getwriter(sys.stdout.encoding)(sys.stdout)
+
     audio = pyaudio.PyAudio()
     if tx:
         info = audio.get_default_output_device_info()
@@ -218,9 +222,7 @@ if __name__ == '__main__':
             bits.append(bit)
             if bits[-2:] == [1, 1]:
                 byte = tobyte(bits)
-                if sys.stdout.isatty():
-                    byte &= 127
-                sys.stdout.write(chr(byte))
+                sys.stdout.write(unichr(byte))
                 bits = []
 
     stream.stop_stream()
